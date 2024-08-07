@@ -1,0 +1,12 @@
+.image:hover .backDrop {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9;
+  background-color: rgba(0, 0, 0, 0.7);
+  position: absolute;
+  top: 0;
+}
+.backDrop {
+  display: none;
+}

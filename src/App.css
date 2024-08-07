@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.rbc-btn-group:nth-child(3) {
+  display: none;
+}
+
+.rbc-show-more {
+  pointer-events: none;
+}
+
+.rbc-month-row {
+  cursor: pointer;
+}
+
+.rbc-date-cell .rbc-button-link {
+  pointer-events: none;
+}
+
+.rbc-row-segment {
+  pointer-events: none;
+}
+
+body {
+  font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif !important;
+}
