@@ -70,3 +70,49 @@ export const useOnlyBossOrAdmin = () => {
 
   return user?.id === 82 || user?.id === 86;
 };
+
+export const storeCategories = [
+  '📱 Electronics',
+  '🏠 Home & Kitchen',
+  '👗 Clothing & Accessories',
+  '🏀 Sports & Outdoors',
+  '💄 Health & Beauty',
+  '🧸 Toys & Games',
+  '📚 Books & Stationery',
+  '🛒 Groceries',
+  '🚗 Automotive',
+  '🐾 Pet Supplies',
+  '📂 Office Supplies',
+  '🛋️ Furniture',
+  '🌻 Garden & Outdoor',
+  '🍼 Baby Products',
+  '💍 Jewelry & Watches',
+];
+
+export const countries = [
+  'United States',
+  'Canada',
+  'Australia',
+  'United Kingdom',
+  'Germany',
+  'France',
+  'Italy',
+  'Spain',
+  'Brazil',
+  'Mexico',
+  'Japan',
+  'China',
+  'India',
+  'Russia',
+  'South Africa',
+  'New Zealand',
+  'Argentina',
+  'Sweden',
+  'Norway',
+  'Netherlands',
+  'Switzerland',
+  'South Korea',
+  'Saudi Arabia',
+  'Turkey',
+  'Indonesia',
+];

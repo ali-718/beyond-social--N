@@ -33,9 +33,27 @@ export default function SignupPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onLogin = (data) => {};
+  const onLogin = (data) => {
+    registerUser(data)
+      .then((data) => {
+        dispatch(loginUserAction(data));
+        navigate(MAIN_ROUTE);
+        dispatch(onOpenAlertAction({ message: 'Signup successfull!' }));
+        localStorage.setItem('user', JSON.stringify(data));
+      })
+      .catch((e) => {
+        dispatch(onOpenAlertAction({ type: 'error', message: e }));
+      });
+  };
 
   useEffect(() => {
+    setFullPageLoading(true);
+    const user = retrieveUser();
+    if (user !== '') {
+      dispatch(loginUserAction(user));
+      navigate(MAIN_ROUTE);
+      return;
+    }
     setFullPageLoading(false);
   }, [navigate, dispatch]);
 

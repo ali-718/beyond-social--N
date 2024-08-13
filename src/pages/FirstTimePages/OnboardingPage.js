@@ -3,6 +3,10 @@ import { Button } from 'src/components/Button/Button';
 import onb1 from 'src/assets/images/onboarding_1.png';
 import onb2 from 'src/assets/images/onboarding_2.png';
 import onb3 from 'src/assets/images/onboarding_3.png';
+import { updateDocument, useUpdateDocument } from 'src/Firebase Functions/UpdateDocument';
+import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
+import { useNavigate } from 'react-router-dom';
+import { POST_LIST_PAGE } from 'src/utils/routeNames';
 
 const slides = [
   {
@@ -25,14 +29,22 @@ const slides = [
 ];
 
 export const OnboardingPage = () => {
+  const navigate = useNavigate();
   const [currentSlide, setCurrentSlide] = useState(0);
+  const localUser = retrieveUser();
 
   const handleNext = () => {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
       // Handle the end of the onboarding, maybe redirect to login or main app
-      alert('Onboarding completed');
+      updateDocument({
+        id: localUser?.id,
+        collectionName: 'users',
+        updatedData: { isFirstTime: false },
+      }).then(() => {
+        navigate(POST_LIST_PAGE);
+      });
     }
   };
 

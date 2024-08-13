@@ -15,6 +15,17 @@ export const POST_LIST_PAGE = '/postlist';
 
 // Profile pages
 export const PROFILE_PAGE = '/profile';
+export const PROFILE_EDIT_PAGE = '/profile/edit';
+export const PROFILE_FOLLOWERS_PAGE = '/profileFollowers';
+
+// Search Pages
+export const SEARCH_PAGE = '/search';
+export const SEARCH_PROFILE_PAGE = '/searchProfile';
+
+// Settings Pages
+export const SETTINGS_PAGE = '/settings';
+export const MY_ACTIVITY_PAGE = '/myActivity';
+export const PROFILE_VISITS_LIST_PAGE = '/profileVisits';
 
 // student routes
 export const STUDENT_HOME_PAGE = '/student/home';

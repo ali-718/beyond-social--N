@@ -14,7 +14,7 @@ export const SelectComponent = ({
 }) => {
   const errorText = error?.[name]?.type === 'required' ? 'Field is required' : error?.[name]?.message;
   return (
-    <FormControl error={!!error?.[name]?.type}>
+    <FormControl className="w-full" error={!!error?.[name]?.type}>
       <InputLabel id={label}>{label}</InputLabel>
 
       <Select

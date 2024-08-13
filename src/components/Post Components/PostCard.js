@@ -1,5 +1,5 @@
 import React from 'react';
-import { FavoriteBorderOutlined, Favorite, Message, ShoppingBag } from '@mui/icons-material';
+import { FavoriteBorderOutlined, Favorite, Message, ShoppingBag, Comment, CommentBank } from '@mui/icons-material';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
 import './Style.css';
@@ -32,7 +32,7 @@ export const PostCard = ({ user, images, likes, description, comments, time, com
             <div class="flex flex-row gap-3">
               <FavoriteBorderOutlined />
 
-              <Message />
+              <CommentBank />
             </div>
 
             <ShoppingBag onClick={openExternalLink} />

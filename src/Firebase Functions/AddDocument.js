@@ -3,6 +3,9 @@ import { db } from 'src/config';
 import { useDispatch } from 'react-redux';
 import { onOpenAlertAction } from 'src/redux/AlertRedux';
 import MD5 from 'crypto-js/md5';
+import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
+import moment from 'moment';
+import { shiftFormat } from 'src/utils/constants';
 
 export const useAddDocument = async ({ data, collectionName }) => {
   const dispatch = useDispatch();
@@ -11,6 +14,15 @@ export const useAddDocument = async ({ data, collectionName }) => {
     return docRef;
   } catch (e) {
     dispatch(onOpenAlertAction({ type: 'error', message: `${e}` }));
+  }
+};
+
+export const addDocument = async ({ data, collectionName }) => {
+  try {
+    const docRef = await addDoc(collection(db, collectionName), data);
+    return docRef;
+  } catch (e) {
+    Promise.reject('Error adding document: ' + e.message);
   }
 };
 
@@ -48,5 +60,19 @@ export const registerUser = async (userData) => {
     return { id: docRef.id, name, email, phone, isVerified: false, isFirstTime: true }; // Return the created user data
   } catch (e) {
     return Promise.reject('Error adding document: ' + e.message);
+  }
+};
+
+export const addProfileVisitsTracking = async ({ visitedUserId }) => {
+  const localUser = retrieveUser();
+  try {
+    const docRef = await addDoc(collection(db, 'profileVisits'), {
+      mainId: localUser?.id,
+      visitedUserId,
+      date: moment().format(shiftFormat),
+    });
+    return docRef;
+  } catch (e) {
+    Promise.reject('Error adding document: ' + e.message);
   }
 };

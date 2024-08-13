@@ -1,0 +1,72 @@
+/* From Uiverse.io by Javierrocadev */
+.card {
+  width: 350px;
+  height: 350px;
+  background: #e8eaea;
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.title,
+.more {
+  padding: 10px 15px;
+}
+
+.user {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 15px;
+}
+
+.user__content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-grow: 1;
+}
+
+.user__container {
+  display: flex;
+  flex-direction: column;
+}
+
+.title {
+  font-weight: 900;
+  font-size: 1.3em;
+}
+
+.name {
+  font-weight: 800;
+}
+
+.username {
+  font-size: 0.9em;
+  color: #64696e;
+}
+
+.image {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 15px;
+}
+
+.follow {
+  border: none;
+  border-radius: 25px;
+  background-color: #0f1113;
+  color: white;
+  padding: 8px 15px;
+  font-weight: 700;
+}
+
+.more {
+  display: block;
+  text-decoration: none;
+  color: rgb(29, 155, 240);
+  font-weight: 800;
+}

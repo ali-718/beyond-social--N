@@ -36,9 +36,26 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const onLogin = async (data) => {};
+  const onLogin = async (data) => {
+    const queryUser = FetchUserByUsernameAndMatchPassword(data)
+      .then((data) => {
+        dispatch(loginUserAction(data));
+        navigate(MAIN_ROUTE);
+        localStorage.setItem('user', JSON.stringify(data));
+      })
+      .catch((e) => {
+        dispatch(onOpenAlertAction({ type: 'error', message: e }));
+      });
+  };
 
   useEffect(() => {
+    setFullPageLoading(true);
+    const user = retrieveUser();
+    if (user !== '') {
+      dispatch(loginUserAction(user));
+      navigate(MAIN_ROUTE);
+      return;
+    }
     setFullPageLoading(false);
   }, [navigate, dispatch]);
 
