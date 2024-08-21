@@ -12,6 +12,7 @@ import {
   ONBOARD_PAGE,
   POST_LIST_PAGE,
   PROFILE_PAGE,
+  POST_PAGE,
   PROFILE_EDIT_PAGE,
   SEARCH_PAGE,
   SEARCH_PROFILE_PAGE,
@@ -19,6 +20,11 @@ import {
   SETTINGS_PAGE,
   MY_ACTIVITY_PAGE,
   PROFILE_VISITS_LIST_PAGE,
+  MESSAGE_LIST,
+  MESSAGE_USER,
+  SINGLE_POST_PAGE,
+  ALL_LIKES_LIST_PAGE,
+  NOTIFICATIONS_LIST,
 } from './utils/routeNames';
 import { HomePage } from './pages/UnAuthPages/HomePage';
 import SignupPage from './pages/AuthPages/SignupPage';
@@ -28,6 +34,7 @@ import { OnboardingPage } from './pages/FirstTimePages/OnboardingPage';
 import { NoAuthHoc } from './hocs/NoAuthHoc';
 import { PostListPage } from './pages/PostsPages/PostListPage';
 import { ProfilePage } from './pages/ProfilePage/ProfilePage';
+import { CreatePost } from './pages/PostsPages/CreatePost';
 import { ProfileEditPage } from './pages/ProfilePage/ProfileEditPage';
 import { SearchPage } from './pages/SearchPages/SearchPage';
 import { SearchProfilePage } from './pages/SearchPages/SearchProfilePage';
@@ -103,15 +110,33 @@ export default function Router() {
       ),
       index: true,
     },
-    // {
-    //   path: PROFILE_PAGE,
-    //   element: (
-    //     <AuthHoc pageValue={4} rightIcon={'settings'}>
-    //       <ProfilePage />
-    //     </AuthHoc>
-    //   ),
-    //   index: true,
-    // },
+    {
+      path: `${SINGLE_POST_PAGE}/:postId`,
+      element: (
+        <AuthHoc noNav noHeader backHeader>
+          <PostListPage singlePost />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: POST_PAGE,
+      element: (
+        <AuthHoc pageValue={2}>
+          <CreatePost />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: PROFILE_PAGE,
+      element: (
+        <AuthHoc pageValue={4} rightIcon={'settings'}>
+          <ProfilePage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
     {
       path: PROFILE_EDIT_PAGE,
       element: (
@@ -121,15 +146,15 @@ export default function Router() {
       ),
       index: true,
     },
-    // {
-    //   path: SEARCH_PAGE,
-    //   element: (
-    //     <AuthHoc pageValue={1} noHeader>
-    //       <SearchPage />
-    //     </AuthHoc>
-    //   ),
-    //   index: true,
-    // },
+    {
+      path: SEARCH_PAGE,
+      element: (
+        <AuthHoc pageValue={1} noHeader>
+          <SearchPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
     {
       path: `${SEARCH_PROFILE_PAGE}/:userId`,
       element: (
@@ -175,6 +200,7 @@ export default function Router() {
       ),
       index: true,
     },
+
     {
       path: '*',
       element: <Page404 />,

@@ -45,7 +45,7 @@ export const ProfileScreen = ({
             <div className="md:w-3/12 md:ml-16">
               <img
                 className="w-20 h-20 md:w-40 md:h-40 object-cover rounded-full
-                 border-2 border-[#FFB6C1] p-1"
+                 border-2 border-yellow-600 p-1"
                 src={profileImage || person}
                 alt="profile"
               />

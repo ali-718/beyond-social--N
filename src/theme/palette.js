@@ -1,4 +1,5 @@
 import { alpha } from '@mui/material/styles';
+import { primaryColor } from 'src/utils/colors';
 
 const GREY = {
   0: '#FFFFFF',
@@ -19,7 +20,7 @@ const LIGHT_MODE = {
   primary: {
     lighter: '#D1E9FC',
     light: '#76B0F1',
-    main: '#2065D1',
+    main: primaryColor,
     dark: '#103996',
     darker: '#061B64',
     contrastText: '#fff',

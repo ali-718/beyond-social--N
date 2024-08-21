@@ -2,19 +2,20 @@ import { Grid } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
-import { fetchProfileVisitsProfile } from 'src/Firebase Functions/ReadDocument';
+import { fetchProfileVisitsProfile, getUserLikesWithPosts } from 'src/Firebase Functions/ReadDocument';
 import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import { AppWidgetSummary } from 'src/sections/@dashboard/app';
-import { PROFILE_VISITS_LIST_PAGE } from 'src/utils/routeNames';
+import { ALL_LIKES_LIST_PAGE, PROFILE_VISITS_LIST_PAGE } from 'src/utils/routeNames';
 
 export const MyActivityPage = () => {
   const navigate = useNavigate();
   const localUser = retrieveUser();
   const [numberOfActivity, setNumberOfActivity] = useState('');
+  const [numberOfLikes, setNumberOfLikes] = useState('');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([fetchProfileVisits()]).then(() => {
+    Promise.all([fetchProfileVisits(), fetchAllLikes()]).then(() => {
       setIsLoading(false);
     });
   }, []);
@@ -24,7 +25,13 @@ export const MyActivityPage = () => {
       setNumberOfActivity(data.length);
     });
 
+  const fetchAllLikes = () =>
+    getUserLikesWithPosts({ userId: localUser?.id }).then((data) => {
+      setNumberOfLikes(data.length);
+    });
+
   const onGoToProfileVisitsPage = () => navigate(PROFILE_VISITS_LIST_PAGE);
+  const onGoToAllLikesPage = () => navigate(ALL_LIKES_LIST_PAGE);
 
   if (isLoading) {
     return <FullLoading />;
@@ -37,9 +44,18 @@ export const MyActivityPage = () => {
           <AppWidgetSummary
             title="Profile Visits"
             total={numberOfActivity}
-            icon={'ant-design:select-outlined'}
+            color="success"
+            icon={'ant-design:usergroup-add-outlined'}
             onClick={onGoToProfileVisitsPage}
-            color="error"
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <AppWidgetSummary
+            title="Likes"
+            total={numberOfLikes}
+            color="info"
+            icon={'ant-design:like-outlined'}
+            onClick={onGoToAllLikesPage}
           />
         </Grid>
       </Grid>

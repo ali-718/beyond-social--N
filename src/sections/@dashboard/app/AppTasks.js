@@ -16,6 +16,7 @@ import {
 } from '@mui/material';
 // components
 import Iconify from '../../../components/iconify';
+import { primaryColor } from 'src/utils/colors';
 
 // ----------------------------------------------------------------------
 
@@ -33,7 +34,7 @@ export default function AppTasks({ title, subheader, list, ...other }) {
   });
 
   return (
-    <Card {...other}>
+    <Card {...other} sx={{ backgroundColor: `${primaryColor} !important` }}>
       <CardHeader title={title} subheader={subheader} />
       <Controller
         name="taskCompleted"

@@ -100,7 +100,7 @@ export const ProfileEditPage = () => {
           <Input register={register} error={errors} name="storeUrl" label="Store Url" />
           <LoadingButton
             loading={isLoading}
-            className={`bg-[#FEE600] text-black hover:bg-black hover:text-white`}
+            className={`bg-[#FFB6C1] text-black hover:bg-black hover:text-white`}
             fullWidth
             size="large"
             type="submit"

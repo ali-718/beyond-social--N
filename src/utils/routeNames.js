@@ -12,6 +12,10 @@ export const ONBOARD_PAGE = '/onboard';
 
 // Post List page
 export const POST_LIST_PAGE = '/postlist';
+export const SINGLE_POST_PAGE = '/post';
+
+// Create Post
+export const POST_PAGE = '/post';
 
 // Profile pages
 export const PROFILE_PAGE = '/profile';
@@ -26,6 +30,14 @@ export const SEARCH_PROFILE_PAGE = '/searchProfile';
 export const SETTINGS_PAGE = '/settings';
 export const MY_ACTIVITY_PAGE = '/myActivity';
 export const PROFILE_VISITS_LIST_PAGE = '/profileVisits';
+export const ALL_LIKES_LIST_PAGE = '/allLikes';
+
+// Message Pages
+export const MESSAGE_LIST = '/messageList';
+export const MESSAGE_USER = '/messageUser';
+
+// Notifications Page
+export const NOTIFICATIONS_LIST = '/notificationsList';
 
 // student routes
 export const STUDENT_HOME_PAGE = '/student/home';

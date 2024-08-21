@@ -1,3 +1,4 @@
+import { Timestamp } from 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
@@ -43,6 +44,7 @@ export const SearchProfilePage = () => {
         data: {
           mainId: userId,
           followerId: localUser?.id,
+          createdAt: Timestamp.now(),
         },
       });
       updateDocument({
