@@ -1,17 +1,19 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import person from 'src/assets/images/person_placeholder.png';
 import './style.css';
 import { fShortenNumber } from 'src/utils/formatNumber';
 import { blackColor, primaryColor } from 'src/utils/colors';
 import { useNavigate } from 'react-router-dom';
-import { PROFILE_FOLLOWERS_PAGE } from 'src/utils/routeNames';
+import { MESSAGE_USER, PROFILE_FOLLOWERS_PAGE, SINGLE_POST_PAGE } from 'src/utils/routeNames';
+import { fetchPostsByUserId } from 'src/Firebase Functions/ReadDocument';
+import { v4 as uuidv4 } from 'uuid';
+import { addAddressVisit } from 'src/Firebase Functions/AddDocument';
 
 export const ProfileScreen = ({
   onUnfollowUser,
   onFollowUser,
   isFollowing,
   user,
-  posts = [],
   isOther = false,
   onNavigateEditPage,
 }) => {
@@ -30,12 +32,28 @@ export const ProfileScreen = ({
     postLength = 0,
     ...userProps
   } = user;
+  const [posts, setPosts] = useState([]);
 
-  const onOpenAddress = () => window.open(`http://maps.google.com/?q=${storeAddress}`);
+  const onOpenAddress = () => {
+    window.open(`http://maps.google.com/?q=${storeAddress}`);
+
+    if (isOther) {
+      addAddressVisit({ otherId: userProps?.id });
+    }
+  };
   const onOpenEmail = () =>
     window.open(`mailto:${email}?subject=Inquiry&body=Hi my name is ${name}, I found this store on Beyond Social.`);
   const onOpenPhone = () => window.open(`tel:${phone}`);
   const onNavigateFollowersPage = () => navigate(`${PROFILE_FOLLOWERS_PAGE}/${userProps?.id}`);
+
+  useEffect(() => {
+    fetchPostsByUserId({ userId: userProps?.id }).then((data) => {
+      setPosts(data);
+    });
+  }, []);
+
+  const navigateToPostPage = (id) => navigate(`${SINGLE_POST_PAGE}/${id}`);
+  const onMessageUser = () => navigate(`${MESSAGE_USER}/${userProps?.id}`);
 
   return (
     <main className="bg-gray-100 bg-opacity-25">
@@ -45,7 +63,7 @@ export const ProfileScreen = ({
             <div className="md:w-3/12 md:ml-16">
               <img
                 className="w-20 h-20 md:w-40 md:h-40 object-cover rounded-full
-                 border-2 border-[#FFB6C1] p-1"
+                 border-2 border-pink-600 p-1"
                 src={profileImage || person}
                 alt="profile"
               />
@@ -98,6 +116,7 @@ export const ProfileScreen = ({
                 </div>
               )}
               <div
+                onClick={onMessageUser}
                 className={`bg-[${blackColor}] w-full px-2 py-1 text-white font-semibold text-sm rounded text-center inline-block`}
               >
                 Message
@@ -123,7 +142,7 @@ export const ProfileScreen = ({
                 text-center p-2 text-gray-600 leading-snug text-sm"
           >
             <li>
-              <span className="font-semibold text-gray-800 block">{fShortenNumber(postLength)}</span>
+              <span className="font-semibold text-gray-800 block">{fShortenNumber(posts.length)}</span>
               posts
             </li>
 
@@ -138,38 +157,17 @@ export const ProfileScreen = ({
           </ul>
 
           <div className="flex flex-wrap -mx-px md:-mx-3">
-            <div className="w-1/3 p-px md:px-3">
-              <a href="#">
+            {posts?.map((item, i) => (
+              <div onClick={() => navigateToPostPage(item?.id)} className="w-1/3 p-px md:px-3" key={i}>
                 <article className="post bg-gray-100 text-white relative pb-full md:mb-6">
                   <img
                     className="w-full h-full absolute left-0 top-0 object-cover"
-                    src="https://images.unsplash.com/photo-1502791451862-7bd8c1df43a7?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60"
-                    alt="image"
+                    src={item?.imageURL?.[0]}
+                    alt="post"
                   />
-
-                  <i className="fas fa-square absolute right-0 top-0 m-1"></i>
-                  <div
-                    className="overlay bg-gray-800 bg-opacity-25 w-full h-full absolute 
-                            left-0 top-0 hidden"
-                  >
-                    <div
-                      className="flex justify-center items-center 
-                                space-x-4 h-full"
-                    >
-                      <span className="p-2">
-                        <i className="fas fa-heart"></i>
-                        412K
-                      </span>
-
-                      <span className="p-2">
-                        <i className="fas fa-comment"></i>
-                        2,909
-                      </span>
-                    </div>
-                  </div>
                 </article>
-              </a>
-            </div>
+              </div>
+            ))}
           </div>
         </div>
       </div>

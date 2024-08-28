@@ -42,7 +42,7 @@ export default function Page404() {
           />
 
           <Button
-            className="bg-[#FFB6C1] text-black hover:bg-black hover:text-white"
+            className="bg-pink-300 text-black hover:bg-black hover:text-white"
             to="/"
             size="large"
             variant="contained"

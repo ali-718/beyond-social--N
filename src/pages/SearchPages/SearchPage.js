@@ -1,41 +1,13 @@
 import React, { useEffect, useRef, useState } from 'react';
 import './styles.css';
 import { SearchCard } from 'src/components/SearchCard/SearchCard';
-import { fetchDocumentsByContains } from 'src/Firebase Functions/ReadDocument';
+import { fetchDocumentsByContains, FetchPostData } from 'src/Firebase Functions/ReadDocument';
 import { useDispatch } from 'react-redux';
 import { onOpenAlertAction } from 'src/redux/AlertRedux';
 import { ArrowBack } from '@mui/icons-material';
 import person from 'src/assets/images/person_placeholder.png';
 import { useNavigate } from 'react-router-dom';
-import { SEARCH_PROFILE_PAGE } from 'src/utils/routeNames';
-const images = [
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-  'https://cdn.pixabay.com/photo/2021/09/07/07/11/game-console-6603120_1280.jpg',
-];
+import { SEARCH_PROFILE_PAGE, SINGLE_POST_PAGE } from 'src/utils/routeNames';
 
 export const SearchPage = () => {
   const navigate = useNavigate();
@@ -43,7 +15,17 @@ export const SearchPage = () => {
   const [searchText, setSearchText] = useState('');
   const [focused, setFocused] = useState(false);
   const [list, setlist] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [posts, setPosts] = useState([]);
   const timeRef = useRef();
+
+  const shuffleArray = (array) => {
+    for (let i = array.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]]; // Swap elements
+    }
+    return array;
+  };
 
   useEffect(() => {
     clearTimeout(timeRef.current);
@@ -60,6 +42,12 @@ export const SearchPage = () => {
       }
       setlist([]);
     }, 500);
+
+    FetchPostData().then((data) => {
+      setLoading(false);
+      const shuffledData = shuffleArray(data); // Shuffle the data
+      setPosts(shuffledData);
+    });
   }, [searchText]);
 
   const onBlur = () => {
@@ -68,6 +56,7 @@ export const SearchPage = () => {
   };
 
   const navigateToSearchProfile = (id) => navigate(`${SEARCH_PROFILE_PAGE}/${id}`);
+  const navigateToPostPage = (id) => navigate(`${SINGLE_POST_PAGE}/${id}`);
 
   return (
     <div className="w-full">
@@ -101,20 +90,42 @@ export const SearchPage = () => {
       {focused ? (
         <div className="w-full mt-4">
           {list?.map((item, i) => (
-            <SearchCard
-              key={i}
-              profileImage={item?.profileImage || person}
-              name={item?.storeName}
-              category={item?.storeCategory}
-              onClick={() => navigateToSearchProfile(item?.id)}
-            />
+            <div className="px-4">
+              <SearchCard
+                key={i}
+                profileImage={item?.profileImage || person}
+                name={item?.storeName}
+                category={item?.storeCategory}
+                onClick={() => navigateToSearchProfile(item?.id)}
+              />
+            </div>
           ))}
         </div>
       ) : (
         <div className="grid grid-cols-3 max-w-[400px] mt-4 place-items-center">
-          {images?.map((item, i) => (
-            <img key={i} className="object-cover" src={item} alt="search" />
-          ))}
+          {posts?.map((item, i) => {
+            // Determine the grid classes for the item
+            const isFeatured = i % 21 === 0;
+            return (
+              <div
+                style={{
+                  gridColumn: isFeatured ? 'span 2' : 'auto',
+                  gridRow: isFeatured ? 'span 2' : 'auto',
+                }}
+                className={`flex items-center justify-center h-full bg-black  ${
+                  isFeatured ? 'col-span-2 row-span-2' : 'col-span-1 row-span-1'
+                }`}
+              >
+                <img
+                  onClick={() => navigateToPostPage(item?.id)}
+                  key={i}
+                  className={`object-cover`}
+                  src={item?.imageURL?.[0]}
+                  alt="search"
+                />
+              </div>
+            );
+          })}
         </div>
       )}
     </div>

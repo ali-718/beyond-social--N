@@ -1,26 +1,61 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { PostCard } from 'src/components/Post Components/PostCard';
-import { addDocument } from 'src/Firebase Functions/AddDocument';
 import { fNumber } from 'src/utils/formatNumber';
+import { FetchPostData, getUserNotifications } from 'src/Firebase Functions/ReadDocument';
+import { FullLoading } from 'src/components/FullLoading/FullLoading';
+import { useParams } from 'react-router-dom';
+import { Helmet } from 'react-helmet';
+import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 
-export const PostListPage = () => {
+export const PostListPage = ({ singlePost }) => {
+  const localUser = retrieveUser();
+  const { postId } = useParams();
+  const [posts, setPosts] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadPosts = async () => {
+      if (singlePost) {
+        FetchPostData(postId).then((data) => {
+          setPosts([data]);
+          console.log({ data });
+          setLoading(false);
+        });
+      } else {
+        try {
+          setLoading(true);
+          const data = await FetchPostData();
+          setPosts(data);
+        } catch (error) {
+          console.error('Error fetching post data:', error);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    loadPosts();
+  }, []);
+
+  if (loading) {
+    return <FullLoading />;
+  }
+
+  const metaPost = posts[0];
   return (
     <div className="w-full overflow-y-hidden">
-      <PostCard
-        user={{ name: 'Naman Chawla', profileImage: 'https://picsum.photos/50/50' }}
-        images={[
-          'https://www.elinz.com.au/assets/full/101375.jpg?20231212101159',
-          'https://www.elinz.com.au/assets/alt_2/101375.jpg?20231212101201',
-        ]}
-        description={
-          'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industrys standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.'
-        }
-        likes={fNumber(2300343)}
-        commentsLength={fNumber(300)}
-        externalLink={
-          'https://www.elinz.com.au/buy/sony-ps5-playstation-5-console-slim/101375?gad_source=1&gclid=Cj0KCQjwiOy1BhDCARIsADGvQnA_EkGbNhk88PFboehg1_8xWMJ2v-sMh6HS90BXga3d1DaWcFxaQrgaAq-YEALw_wcB'
-        }
-      />
+      {posts.map((data) => (
+        <>
+          <PostCard
+            user={data?.user}
+            images={data.imageURL}
+            description={data.description}
+            likes={fNumber(data?.likes)}
+            externalLink={data.externalLink}
+            createdAt={data.createdAt}
+            otherProps={data}
+          />
+        </>
+      ))}
     </div>
   );
 };

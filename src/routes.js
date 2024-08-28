@@ -25,6 +25,8 @@ import {
   SINGLE_POST_PAGE,
   ALL_LIKES_LIST_PAGE,
   NOTIFICATIONS_LIST,
+  INSIGHTS_PAGE,
+  MY_PROFILE_VISITS_LIST_PAGE,
 } from './utils/routeNames';
 import { HomePage } from './pages/UnAuthPages/HomePage';
 import SignupPage from './pages/AuthPages/SignupPage';
@@ -42,6 +44,11 @@ import { SearchFollowersListPage } from './pages/SearchPages/SearchFollowersList
 import { SettingsPage } from './pages/SettingsPages/SettingsPage';
 import { MyActivityPage } from './pages/SettingsPages/MyActivityPage';
 import { ProfileVisitsListPage } from './pages/SettingsPages/ProfileVisitsListPage';
+import { MessageListPage } from './pages/Message/MessageListPage';
+import { MessagePage } from './pages/Message/MessagePage';
+import { AllLikeListPage } from './pages/SettingsPages/AllLikesListPage';
+import { NotificationsPage } from './pages/NotificationsPage/NotificationsPage';
+import { MyInsightsPage } from './pages/SettingsPages/MyInsightsPage';
 
 export default function Router() {
   const user = useSelector((state) => state.user.user);
@@ -106,6 +113,15 @@ export default function Router() {
       element: (
         <AuthHoc pageValue={0}>
           <PostListPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: NOTIFICATIONS_LIST,
+      element: (
+        <AuthHoc noHeader pageValue={3}>
+          <NotificationsPage />
         </AuthHoc>
       ),
       index: true,
@@ -183,10 +199,28 @@ export default function Router() {
       index: true,
     },
     {
+      path: INSIGHTS_PAGE,
+      element: (
+        <AuthHoc noNav noHeader backHeader={'Store Insights'}>
+          <MyInsightsPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
       path: MY_ACTIVITY_PAGE,
       element: (
         <AuthHoc noNav noHeader backHeader={'Your Activity'}>
           <MyActivityPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: MY_PROFILE_VISITS_LIST_PAGE,
+      element: (
+        <AuthHoc noNav noHeader backHeader={'Profile Visits'}>
+          <ProfileVisitsListPage isMy />
         </AuthHoc>
       ),
       index: true,
@@ -200,7 +234,33 @@ export default function Router() {
       ),
       index: true,
     },
-
+    {
+      path: ALL_LIKES_LIST_PAGE,
+      element: (
+        <AuthHoc noNav noHeader backHeader={'Your Likes'}>
+          <AllLikeListPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: MESSAGE_LIST,
+      element: (
+        <AuthHoc noNav noHeader backHeader={'Inbox'}>
+          <MessageListPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: `${MESSAGE_USER}/:userId`,
+      element: (
+        <AuthHoc noNav noHeader>
+          <MessagePage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
     {
       path: '*',
       element: <Page404 />,

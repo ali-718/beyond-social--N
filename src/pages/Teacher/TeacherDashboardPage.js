@@ -71,7 +71,7 @@ export const TeacherDashboardPage = () => {
           <AppWidgetSummary
             title="Total Courses"
             total={dashboardData?.total_courses}
-            color="warning"
+            color="error"
             icon={'ant-design:book-outlined'}
           />
         </Grid>

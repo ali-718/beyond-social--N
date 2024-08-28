@@ -1,25 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import './messageStyles.css';
-import { fetchDocumentsByQuery, fetchMessageList } from 'src/Firebase Functions/ReadDocument';
+import { fetchMessageList } from 'src/Firebase Functions/ReadDocument';
 import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
 import { SearchCard } from 'src/components/SearchCard/SearchCard';
 import { useNavigate } from 'react-router-dom';
 import { MESSAGE_USER } from 'src/utils/routeNames';
+import { useSelector } from 'react-redux';
 
 export const MessageListPage = () => {
   const navigate = useNavigate();
   const localUser = retrieveUser();
-  const [messageList, setMessageList] = useState([]);
+  const messageList = useSelector((state) => state.user.messageList);
+  const isLoading = useSelector((state) => state.user.messageLoading);
   const [searchText, setSearchText] = useState('');
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    fetchMessageList({ senderId: localUser?.id }).then((data) => {
-      setMessageList(data);
-      setIsLoading(false);
-    });
-  }, []);
 
   const onGoToMessagePage = (id) => navigate(`${MESSAGE_USER}/${id}`);
 
@@ -39,7 +33,7 @@ export const MessageListPage = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="w-full mt-2">
+      <div className="w-full mt-2 px-4">
         {messageList
           ?.filter((item) => item?.storeName?.toLowerCase()?.includes(searchText))
           .map((item, i) => (
@@ -49,6 +43,7 @@ export const MessageListPage = () => {
               profileImage={item?.profileImage}
               name={item?.storeName}
               category={item?.lastMessage}
+              isSeen={item?.isSeen}
             />
           ))}
       </div>

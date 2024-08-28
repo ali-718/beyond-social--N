@@ -96,7 +96,7 @@ export default function LoginPage() {
             <div>
               <LoadingButton
                 loading={isLoading}
-                className={`bg-[#FFB6C1] text-black hover:bg-black hover:text-white`}
+                className={`bg-[#FEE600] text-black hover:bg-black hover:text-white`}
                 fullWidth
                 size="large"
                 type="submit"

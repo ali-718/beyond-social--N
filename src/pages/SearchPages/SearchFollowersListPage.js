@@ -93,7 +93,7 @@ export const SearchFollowersListPage = () => {
           onChange={(e) => setSearchText(e.target.value)}
         />
       </div>
-      <div className="w-full">
+      <div className="w-full px-4">
         {currentTab === 0 &&
           list.map((item, i) => (
             <SearchCard

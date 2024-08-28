@@ -43,7 +43,7 @@ export const ProfileImage = ({ profileImage = '', setProfileImage }) => {
     <div>
       {isLoadingImage ? (
         <div class="w-32 h-32 object-cover rounded-full border-2 flex items-center justify-center">
-          <CircularProgress color="warning" />
+          <CircularProgress color="error" />
         </div>
       ) : (
         <img

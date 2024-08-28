@@ -5,6 +5,7 @@ import { ProfileScreen } from 'src/components/ProfileComponents/ProfileScreen';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
 import { useNavigate } from 'react-router-dom';
 import { PROFILE_EDIT_PAGE } from 'src/utils/routeNames';
+import { addDocument, addDocumentsBatch } from 'src/Firebase Functions/AddDocument';
 
 export const ProfilePage = () => {
   const navigate = useNavigate();

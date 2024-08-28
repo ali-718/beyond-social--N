@@ -55,7 +55,7 @@ export default function AccountPopover() {
           }),
         }}
       >
-        <Avatar className="border-yellow-300 border" src={user?.profilePicture || photoUrl} alt="photoURL" />
+        <Avatar className="border-pink-300 border" src={user?.profilePicture || photoUrl} alt="photoURL" />
       </IconButton>
 
       <Popover

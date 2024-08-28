@@ -27,6 +27,7 @@
   justify-content: space-between;
   align-items: center;
   flex-grow: 1;
+  margin-left: 15px;
 }
 
 .user__container {
@@ -57,7 +58,6 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  margin-right: 15px;
 }
 
 .follow {

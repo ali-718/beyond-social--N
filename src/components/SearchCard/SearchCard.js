@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './SearchCard.module.css';
 import person from 'src/assets/images/person_placeholder.png';
+import { Badge } from '@mui/material';
 
 export const SearchCard = ({
   profileImage,
@@ -10,6 +11,7 @@ export const SearchCard = ({
   showFollowButton,
   rightComponent,
   onClick,
+  isSeen = true,
   ...props
 }) => {
   return (
@@ -18,7 +20,7 @@ export const SearchCard = ({
         <img
           onClick={onClick}
           src={profileImage || person}
-          className={`${styles.image} border-2 border-yellow-600`}
+          className={`${styles.image} border-2 border-pink-600`}
           alt="pr"
         />
       ) : (
@@ -26,8 +28,10 @@ export const SearchCard = ({
       )}
       <div className={styles.user__content}>
         <div onClick={onClick} className={styles.text}>
-          <span className={styles.name}>{name}</span>
-          <p className={`${styles.username} truncate w-[250px]`}>{category}</p>
+          <span className={`${styles.name} ${!isSeen && 'font-bold text-black'}`}>
+            {name} {!isSeen && <Badge variant="dot" className="ml-2 mt-[-2px]" badgeContent={' '} color="error" />}
+          </span>
+          <p className={`${styles.username}  truncate w-[220px] ${!isSeen && 'font-bold text-black'}`}>{category}</p>
         </div>
         {showFollowButton && <button className={styles.follow}>Follow</button>}
         {rightComponent}

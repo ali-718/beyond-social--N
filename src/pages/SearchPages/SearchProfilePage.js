@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
 import { ProfileScreen } from 'src/components/ProfileComponents/ProfileScreen';
-import { addDocument, addProfileVisitsTracking } from 'src/Firebase Functions/AddDocument';
+import { addDocument, addMyProfileVisit, addProfileVisitsTracking } from 'src/Firebase Functions/AddDocument';
 import {
   fetchDocumentsById,
   fetchDocumentsByQuery,
@@ -27,12 +27,12 @@ export const SearchProfilePage = () => {
     user.then((data) => {
       setUserProfile(data);
       fetchIsFollowingTheUser({ followerId: localUser?.id, mainId: data?.id }).then((followers) => {
-        console.log({ followers });
         if (followers?.length > 0) {
           setIsFollowing(true);
         }
         setIsLoading(false);
         addProfileVisitsTracking({ visitedUserId: data?.id });
+        addMyProfileVisit({ otherId: data?.id });
       });
     });
   }, []);

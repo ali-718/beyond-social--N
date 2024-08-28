@@ -5,7 +5,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
 import { SearchCard } from 'src/components/SearchCard/SearchCard';
-import { addDocument, addMessageListData } from 'src/Firebase Functions/AddDocument';
+import { addDocument, addMessageListData, updateSeen } from 'src/Firebase Functions/AddDocument';
 import { fetchMessagesByUserId, useFetchDocumentsById } from 'src/Firebase Functions/ReadDocument';
 import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import { blackColor } from 'src/utils/colors';
@@ -26,8 +26,8 @@ export const MessagePage = () => {
   useEffect(() => {
     user.then((data) => {
       setUserProfile(data);
-      fetchMessagesByUserId({ userId: localUser?.id }).then((msg) => {
-        console.log({ msg });
+      fetchMessagesByUserId({ userId: localUser?.id, otherUserId: data?.id }).then((msg) => {
+        updateSeen({ senderId: localUser?.id, receiverId: data?.id });
         setMessageList(msg);
         setIsLoading(false);
       });
@@ -111,7 +111,7 @@ export const MessagePage = () => {
         />
         <Send
           onClick={messageText?.length > 0 ? onSendMessage : () => null}
-          className={`mx-2 mb-2 text-yellow-500 ${messageText?.length > 0 ? 'opacity-100' : 'opacity-50'}`}
+          className={`mx-2 mb-2 text-pink-500 ${messageText?.length > 0 ? 'opacity-100' : 'opacity-50'}`}
         />
       </div>
     </div>

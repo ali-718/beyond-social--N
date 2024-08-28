@@ -30,7 +30,10 @@ export const SEARCH_PROFILE_PAGE = '/searchProfile';
 export const SETTINGS_PAGE = '/settings';
 export const MY_ACTIVITY_PAGE = '/myActivity';
 export const PROFILE_VISITS_LIST_PAGE = '/profileVisits';
+export const MY_PROFILE_VISITS_LIST_PAGE = '/myProfileVisits';
 export const ALL_LIKES_LIST_PAGE = '/allLikes';
+export const INSIGHTS_PAGE = '/insights';
+export const MY_PROFILE_VISITS_PAGE = '/myProfileVisits';
 
 // Message Pages
 export const MESSAGE_LIST = '/messageList';
