@@ -9,7 +9,7 @@ import { LOGIN_USER } from 'src/config/Apis';
 import { loginUserAction } from 'src/redux/AuthRedux';
 import { useNavigate } from 'react-router-dom';
 import { FullLoading } from 'src/components/FullLoading/FullLoading';
-import { HOME_ROUTE, MAIN_ROUTE, SIGNUP_ROUTE } from 'src/utils/routeNames';
+import { FORGOT_PASSWORD, HOME_ROUTE, MAIN_ROUTE, SIGNUP_ROUTE } from 'src/utils/routeNames';
 import { LoginSvg } from './LoginSvg';
 import { Input } from 'src/components/Input/Input';
 import { IconButton, InputAdornment } from '@mui/material';
@@ -59,6 +59,8 @@ export default function LoginPage() {
     setFullPageLoading(false);
   }, [navigate, dispatch]);
 
+  const onGoToForgotPasswordPage = () => navigate(FORGOT_PASSWORD);
+
   if (fullPageLoading) return <FullLoading />;
 
   return (
@@ -76,27 +78,32 @@ export default function LoginPage() {
           <div className="space-y-4">
             <Input type="email" required register={register} error={errors} name="email" label="Email" />
 
-            <Input
-              required
-              name="password"
-              label="Password"
-              type={showPassword ? 'text' : 'password'}
-              register={register}
-              error={errors}
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
-                      <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }}
-            />
+            <div>
+              <Input
+                required
+                name="password"
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                register={register}
+                error={errors}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => setShowPassword(!showPassword)} edge="end">
+                        <Iconify icon={showPassword ? 'eva:eye-fill' : 'eva:eye-off-fill'} />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                }}
+              />
+              <p onClick={onGoToForgotPasswordPage} className="text-[12px] mt-2 text-right">
+                Forgot Password?
+              </p>
+            </div>
             <div>
               <LoadingButton
                 loading={isLoading}
-                className={`bg-[#FEE600] text-black hover:bg-black hover:text-white`}
+                className={`bg-[${primaryColor}] text-black hover:bg-black hover:text-white`}
                 fullWidth
                 size="large"
                 type="submit"

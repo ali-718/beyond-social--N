@@ -11,6 +11,7 @@ import { useFetchDocumentsById } from 'src/Firebase Functions/ReadDocument';
 import { useUpdateDocument } from 'src/Firebase Functions/UpdateDocument';
 import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import { onOpenAlertAction } from 'src/redux/AlertRedux';
+import { primaryColor } from 'src/utils/colors';
 import { countries, storeCategories } from 'src/utils/constants';
 import { PROFILE_PAGE } from 'src/utils/routeNames';
 
@@ -100,7 +101,7 @@ export const ProfileEditPage = () => {
           <Input register={register} error={errors} name="storeUrl" label="Store Url" />
           <LoadingButton
             loading={isLoading}
-            className={`bg-[#FEE600] text-black hover:bg-black hover:text-white`}
+            className={`bg-[${primaryColor}] text-black hover:bg-black hover:text-white`}
             fullWidth
             size="large"
             type="submit"

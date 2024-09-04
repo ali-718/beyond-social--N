@@ -26,11 +26,13 @@ export const MessagePage = () => {
   useEffect(() => {
     user.then((data) => {
       setUserProfile(data);
-      fetchMessagesByUserId({ userId: localUser?.id, otherUserId: data?.id }).then((msg) => {
-        updateSeen({ senderId: localUser?.id, receiverId: data?.id });
-        setMessageList(msg);
-        setIsLoading(false);
-      });
+      setInterval(() => {
+        fetchMessagesByUserId({ userId: localUser?.id, otherUserId: data?.id }).then((msg) => {
+          updateSeen({ senderId: localUser?.id, receiverId: data?.id });
+          setMessageList(msg);
+          setIsLoading(false);
+        });
+      }, 1000);
     });
   }, []);
 
@@ -92,7 +94,7 @@ export const MessagePage = () => {
       <div className="w-full p-2 flex items-end">
         <textarea
           ref={textAreaRef}
-          className="rounded py-2 pl-3 w-full border border-gray-800 resize-none"
+          className="rounded py-2 pl-3 w-full border border-pink-400 resize-none focus:border-pink-400"
           placeholder="Aa"
           rows="1"
           onInput={(e) => {
@@ -126,7 +128,7 @@ const MessageBubble = ({ message, senderId, localUser, time }) => {
       <div className="max-w-xs">
         <div
           className={`w-full p-3 rounded-lg ${
-            isCurrentUser ? 'bg-yellow-500 text-black' : `bg-[${blackColor}] text-white`
+            isCurrentUser ? 'bg-pink-400 text-black' : `bg-[${blackColor}] text-white`
           }`}
           style={{ whiteSpace: 'pre-line' }}
         >

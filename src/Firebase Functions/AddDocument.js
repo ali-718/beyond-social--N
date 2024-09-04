@@ -16,10 +16,10 @@ import { db } from 'src/config';
 import { useDispatch } from 'react-redux';
 import { onOpenAlertAction } from 'src/redux/AlertRedux';
 import MD5 from 'crypto-js/md5';
-import { formatDate } from 'src/utils/formatTime';
 import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import moment from 'moment';
 import { shiftFormat } from 'src/utils/constants';
+import { formatDate } from 'src/utils/formatTime';
 
 export const useAddDocument = async ({ data, collectionName }) => {
   const dispatch = useDispatch();
@@ -168,6 +168,24 @@ export const userPost = async (data) => {
     return { id: docRef.id, ...data }; // Return the created user data
   } catch (e) {
     return Promise.reject('Error posting document: ' + e.message);
+  }
+};
+
+export const updatePost = async ({ postId, imageURL, description, externalLink }) => {
+  // Get the post document reference
+  const postDocRef = doc(db, 'post', postId);
+  const postSnapshot = await getDoc(postDocRef);
+
+  if (postSnapshot.exists()) {
+    // Update the post data
+    try {
+      await updateDoc(postDocRef, { imageURL, description, externalLink });
+      return 'Post updated successfully';
+    } catch (e) {
+      return Promise.reject('Error updating post: ' + e.message);
+    }
+  } else {
+    return Promise.reject('Post not found');
   }
 };
 

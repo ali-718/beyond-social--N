@@ -7,6 +7,7 @@ import {
   Instagram,
   Twitter,
   WhatsApp,
+  MoreVert,
 } from '@mui/icons-material';
 import { Slide } from 'react-slideshow-image';
 import person from 'src/assets/images/person_placeholder.png';
@@ -17,6 +18,13 @@ import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { SEARCH_PROFILE_PAGE } from 'src/utils/routeNames';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import { ModalComponent } from '../ModalComponent/ModalComponent';
+import { CreatePost } from 'src/pages/PostsPages/CreatePost';
+
+const ITEM_HEIGHT = 48;
+
+const options = ['Edit Post'];
 
 export const PostCard = ({
   user,
@@ -31,10 +39,22 @@ export const PostCard = ({
   const navigate = useNavigate();
   const localUser = retrieveUser();
   const [isLiked, setIsLiked] = useState(false);
+  const [anchorEl, setAnchorEl] = React.useState(null);
   const [likes, setLikes] = useState(postLikes);
+  const [openModal, setOpenModal] = useState(false);
   const openExternalLink = () => {
     window.open(externalLink);
   };
+
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const onEditPost = () => setOpenModal(true);
 
   const navigateToSearchProfile = () => navigate(`${SEARCH_PROFILE_PAGE}/${user?.id}`);
 
@@ -89,15 +109,59 @@ export const PostCard = ({
     });
   }, []);
 
+  const onEditSuccessfull = () => {
+    window.location.reload();
+  };
+
   return (
     <div class={`bg-gray-200 flex items-center justify-center overflow-hidden w-[${window.screen.width}]`}>
       <card class="bg-white border-gray-300 border w-full">
-        <header onClick={navigateToSearchProfile} class="items-center p-3 border-b border-b-gray-300 flex items-center">
-          <div class="">
+        <header class="items-center p-3 border-b border-b-gray-300 flex justify-between">
+          <div onClick={navigateToSearchProfile} class="flex items-center">
             <img src={user?.profileImage || person} class="rounded-full w-10 h-10" />
-          </div>
 
-          <div class="text-sm font-semibold ml-4">{user?.storeName || user?.name}</div>
+            <div class="text-sm font-semibold ml-4">{user?.storeName || user?.name}</div>
+          </div>
+          {localUser?.id === user?.id && (
+            <IconButton
+              aria-label="more"
+              id="long-button"
+              aria-controls={open ? 'long-menu' : undefined}
+              aria-expanded={open ? 'true' : undefined}
+              aria-haspopup="true"
+              onClick={handleClick}
+            >
+              <MoreVert />
+            </IconButton>
+          )}
+
+          <Menu
+            id="long-menu"
+            MenuListProps={{
+              'aria-labelledby': 'long-button',
+            }}
+            anchorEl={anchorEl}
+            open={open}
+            onClose={handleClose}
+            slotProps={{
+              paper: {
+                style: {
+                  maxHeight: ITEM_HEIGHT * 4.5,
+                  width: '20ch',
+                },
+              },
+            }}
+          >
+            {options.map((option) => (
+              <MenuItem key={option} onClick={onEditPost}>
+                {option}
+              </MenuItem>
+            ))}
+          </Menu>
+
+          <ModalComponent onClose={() => setOpenModal(false)} open={openModal}>
+            <CreatePost editPostData={otherProps} onEditSuccessfull={onEditSuccessfull} />
+          </ModalComponent>
         </header>
 
         <Slide

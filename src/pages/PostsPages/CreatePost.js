@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { imgdb } from 'src/config';
-import { userPost } from 'src/Firebase Functions/AddDocument';
+import { updatePost, userPost } from 'src/Firebase Functions/AddDocument';
 import { MAIN_ROUTE } from 'src/utils/routeNames';
 import { useNavigate } from 'react-router-dom';
 import { onOpenAlertAction } from 'src/redux/AlertRedux';
@@ -18,18 +18,28 @@ import { useApiHook } from 'src/hooks/apiHook';
 import { CircularProgress } from '@mui/material';
 import { Delete } from '@mui/icons-material';
 
-export const CreatePost = () => {
+export const CreatePost = ({ editPostData, onEditSuccessfull = () => null }) => {
   const localUser = retrieveUser();
   const [postLoading, setpostLoading] = useState(false);
   const [postContent, setPostContent] = useState(null);
   const [externalLink, setExternalLink] = useState(null);
   const [previewSrc, setPreviewSrc] = useState([]);
+  const [isEdit, setIsEdit] = useState(false);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { isLoading, apiCall: apiCallForImage } = useApiHook({
     method: 'post',
     call: imageUploadBlobStorageUrl,
   });
+
+  useEffect(() => {
+    if (editPostData?.id) {
+      setPreviewSrc(editPostData?.imageURL);
+      setPostContent(editPostData?.description);
+      setExternalLink(editPostData?.externalLink);
+      setIsEdit(true);
+    }
+  }, [editPostData]);
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
@@ -58,16 +68,29 @@ export const CreatePost = () => {
         date: moment().format(shiftFormat),
         likes: 0,
       };
-
-      userPost(data)
-        .then(() => {
-          navigate(MAIN_ROUTE);
-          setpostLoading(false);
-        })
-        .catch((e) => {
-          dispatch(onOpenAlertAction({ type: 'error', message: e }));
-          setpostLoading(false);
-        });
+      if (isEdit) {
+        updatePost({ postId: editPostData?.id, imageURL: previewSrc, description: postContent, externalLink })
+          .then(() => {
+            onEditSuccessfull();
+            setpostLoading(false);
+            console.log('success');
+          })
+          .catch((e) => {
+            dispatch(onOpenAlertAction({ type: 'error', message: e }));
+            setpostLoading(false);
+            console.log({ e });
+          });
+      } else {
+        userPost(data)
+          .then(() => {
+            navigate(MAIN_ROUTE);
+            setpostLoading(false);
+          })
+          .catch((e) => {
+            dispatch(onOpenAlertAction({ type: 'error', message: e }));
+            setpostLoading(false);
+          });
+      }
     }
   };
 
@@ -149,6 +172,7 @@ export const CreatePost = () => {
           sm:leading-5 resize-none focus:outline-none focus:border-blue-500"
                 placeholder="What's on your mind?"
                 onChange={(e) => setPostContent(e.target.value)}
+                value={postContent}
               ></textarea>
               <span class="text-gray-500 text-sm">Max 280 characters</span>
             </div>
@@ -165,19 +189,20 @@ export const CreatePost = () => {
           sm:leading-5 resize-none focus:outline-none focus:border-blue-500"
                 placeholder=""
                 onChange={(e) => setExternalLink(e.target.value)}
+                value={externalLink}
               ></textarea>
             </div>
 
-            <div class="flex items-center justify-between">
+            <div class="flex items-center justify-center">
               {postLoading ? (
                 <CircularProgress color="error" />
               ) : (
                 <button
                   type="submit"
-                  class={`flex justify-center items-center bg-[#FFB6C1] focus:outline-none focus:shadow-outline-blue text-black py-2 px-4 rounded-md transition duration-300 gap-2`}
+                  class={`flex justify-center items-center bg-[${primaryColor}] focus:outline-none focus:shadow-outline-blue text-black py-2 px-4 rounded-md transition duration-300 gap-2`}
                 >
                   {' '}
-                  Post{' '}
+                  {!isEdit ? 'Post' : 'Update Post'}{' '}
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="19"

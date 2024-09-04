@@ -27,6 +27,9 @@ import {
   NOTIFICATIONS_LIST,
   INSIGHTS_PAGE,
   MY_PROFILE_VISITS_LIST_PAGE,
+  FORGOT_PASSWORD,
+  CHANGE_PASSWORD_PAGE,
+  MY_ADDRESS_VISITS_PAGE,
 } from './utils/routeNames';
 import { HomePage } from './pages/UnAuthPages/HomePage';
 import SignupPage from './pages/AuthPages/SignupPage';
@@ -49,6 +52,9 @@ import { MessagePage } from './pages/Message/MessagePage';
 import { AllLikeListPage } from './pages/SettingsPages/AllLikesListPage';
 import { NotificationsPage } from './pages/NotificationsPage/NotificationsPage';
 import { MyInsightsPage } from './pages/SettingsPages/MyInsightsPage';
+import { ForgotPasswordPage } from './pages/AuthPages/ForgotPasswordPage';
+import { ChangePasswordPage } from './pages/SettingsPages/ChangePasswordPage';
+import { AddressVisitsPage } from './pages/SettingsPages/AddressVisitsListPage';
 
 export default function Router() {
   const user = useSelector((state) => state.user.user);
@@ -64,6 +70,17 @@ export default function Router() {
       element: (
         <NoAuthHoc>
           <HomePage />
+        </NoAuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: FORGOT_PASSWORD,
+      element: user?.id ? (
+        <Navigate to={HOME_ROUTE} />
+      ) : (
+        <NoAuthHoc>
+          <ForgotPasswordPage />
         </NoAuthHoc>
       ),
       index: true,
@@ -190,6 +207,15 @@ export default function Router() {
       index: true,
     },
     {
+      path: CHANGE_PASSWORD_PAGE,
+      element: (
+        <AuthHoc noNav noHeader backHeader={'Change Password'}>
+          <ChangePasswordPage />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
       path: SETTINGS_PAGE,
       element: (
         <AuthHoc noNav noHeader backHeader={'Settings'}>
@@ -221,6 +247,15 @@ export default function Router() {
       element: (
         <AuthHoc noNav noHeader backHeader={'Profile Visits'}>
           <ProfileVisitsListPage isMy />
+        </AuthHoc>
+      ),
+      index: true,
+    },
+    {
+      path: MY_ADDRESS_VISITS_PAGE,
+      element: (
+        <AuthHoc noNav noHeader backHeader={'Address Visits'}>
+          <AddressVisitsPage />
         </AuthHoc>
       ),
       index: true,

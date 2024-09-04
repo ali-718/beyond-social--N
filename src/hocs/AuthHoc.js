@@ -102,8 +102,8 @@ export const AuthHoc = ({ noNav, noHeader, backHeader, pageValue, rightIcon = 'm
   const onGoToMessageList = () => navigate(MESSAGE_LIST);
 
   const _messageIcon = (
-    <Badge badgeContent={isSeen ? ' ' : null} color="error">
-      <Message />
+    <Badge badgeContent={isSeen ? ' ' : null} color="warning">
+      <Message onClick={onGoToMessageList} />
     </Badge>
   );
 
@@ -162,7 +162,7 @@ export const AuthHoc = ({ noNav, noHeader, backHeader, pageValue, rightIcon = 'm
               label="Notifications"
               icon={
                 notificationsCount > 0 ? (
-                  <Badge badgeContent={notificationsCount} color="error">
+                  <Badge badgeContent={notificationsCount} color="warning">
                     <Favorite />
                   </Badge>
                 ) : (

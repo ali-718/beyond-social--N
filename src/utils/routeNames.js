@@ -5,6 +5,7 @@ export const PAGE_404_ROUTE = '/404';
 export const LOGIN_ROUTE = '/login';
 export const SIGNUP_ROUTE = '/signup';
 export const HOME_ROUTE = '/home';
+export const FORGOT_PASSWORD = '/forgot/password';
 
 // First time pages
 export const PROFILE_CHECK_PAGE = '/profile_check_page';
@@ -34,6 +35,8 @@ export const MY_PROFILE_VISITS_LIST_PAGE = '/myProfileVisits';
 export const ALL_LIKES_LIST_PAGE = '/allLikes';
 export const INSIGHTS_PAGE = '/insights';
 export const MY_PROFILE_VISITS_PAGE = '/myProfileVisits';
+export const MY_ADDRESS_VISITS_PAGE = '/myAddressVisits';
+export const CHANGE_PASSWORD_PAGE = '/changePassword';
 
 // Message Pages
 export const MESSAGE_LIST = '/messageList';

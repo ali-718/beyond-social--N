@@ -1,10 +1,11 @@
-import { collection, doc, getDoc, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { db } from 'src/config';
 import { useDispatch } from 'react-redux';
 import { onOpenAlertAction } from 'src/redux/AlertRedux';
 import MD5 from 'crypto-js/md5';
 import { retrieveUser } from 'src/hooks/AuthHooks/AuthHooks';
 import moment from 'moment';
+import axios from 'axios';
 
 export const useFetchDocuments = async ({ collectionName }) => {
   const dispatch = useDispatch();
@@ -151,6 +152,73 @@ export const FetchUserByUsernameAndMatchPassword = async ({ email, password }) =
     } else {
       return Promise.reject('Incorrect password');
     }
+  } else {
+    return Promise.reject('User not found');
+  }
+};
+
+export const changePassword = async ({ oldPassword, newPassword, userId }) => {
+  // Get the user document reference
+  const userDocRef = doc(db, 'users', userId);
+  const userSnapshot = await getDoc(userDocRef);
+
+  if (userSnapshot.exists()) {
+    const userData = userSnapshot.data();
+
+    // Check if the old password matches
+    const hashedOldPassword = MD5(oldPassword).toString();
+    if (hashedOldPassword === userData.password) {
+      // Hash the new password
+      const hashedNewPassword = MD5(newPassword).toString();
+
+      // Update the password in Firestore
+      try {
+        await updateDoc(userDocRef, { password: hashedNewPassword });
+        return 'Password updated successfully';
+      } catch (e) {
+        return Promise.reject('Error updating password: ' + e.message);
+      }
+    } else {
+      return Promise.reject('Incorrect old password');
+    }
+  } else {
+    return Promise.reject('User not found');
+  }
+};
+
+export const FetchUserByEmail = async ({ email }) => {
+  const q = query(collection(db, 'users'), where('email', '==', email));
+  const querySnapshot = await getDocs(q);
+
+  if (!querySnapshot.empty) {
+    const userDoc = querySnapshot.docs[0];
+    const userData = userDoc.data();
+    const data = JSON.stringify({
+      Messages: [
+        {
+          from: { Email: 'steve@cheatsheet4.net', Name: 'Beyond Social' },
+          to: [{ Email: email, Name: userData?.name }],
+          Subject: 'Password reset',
+          text: `please reset your password from the following link`,
+        },
+      ],
+    });
+
+    const config = {
+      method: 'post',
+      url: 'https://api.mailersend.com/v1/email',
+      data: data,
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer mlsn.2d0b9937c5f9bba97abec5821555d67fc0670c3521cc92a8a403e3d643b48d82`,
+        'X-Requested-With': 'XMLHttpRequest',
+        'Access-Control-Allow-Origin': '*',
+      },
+    };
+
+    axios(config)
+      .then(() => Promise.resolve())
+      .catch(() => Promise.reject());
   } else {
     return Promise.reject('User not found');
   }

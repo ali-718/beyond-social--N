@@ -58,7 +58,7 @@ export const ImageList = ({
           className="w-[100px] h-[100px] rounded border-2 border-slate-800 flex items-center justify-center cursor-pointer"
         >
           {isLoading ? (
-            <CircularProgress />
+            <CircularProgress color="error" />
           ) : (
             <img src={addIcon} className={'w-[30px] h-[30px] object-contain'} alt={'add'} />
           )}
